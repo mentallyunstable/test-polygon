@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BuildingState : IDisposable
+public abstract class BuildingState
 {
     protected Building buildingContext;
 
@@ -18,7 +18,7 @@ public abstract class BuildingState : IDisposable
         OnStateCreate();
     }
 
-    public void Dispose()
+    public void Kill()
     {
         OnStateKill();
         //Debug.LogWarning("BuildingState Dispose");

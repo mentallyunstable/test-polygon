@@ -20,10 +20,11 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
     public bool IsBought { get { return state is BoughtBuildingState; } }
     public bool IsWorking { get { return state is WorkingBuildingState; } }
 
-    private BuildingConfigObserver configObserver;
     private BuildingDataSaver dataSaver;
     private BuildingViewController viewController;
 
+    [Inject]
+    private IConfigObserver<Building, BuildingConfig> configObserver;
     [Inject]
     private TimeEventsHandler timeEventshandler;
 
@@ -32,6 +33,7 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
     private void Awake()
     {
         initializer.AddInitiable(this);
+        configObserver.AddSubscriber(this);
         timeEventshandler.AddNewTimer(this);
         Debug.Log("Building Awake");
     }
@@ -39,11 +41,10 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
     public void Initiate(BuildingInitialData initialData)
     {
         dataSaver = initialData.DataSaver;
-        configObserver = initialData.ConfigObserver;
+        //configObserver = initialData.ConfigObserver;
         viewController = initialData.ViewController;
 
         dataSaver.AddSubscriber(this);
-        configObserver.AddSubscriber(this);
     }
 
     private void OnDestroy()
@@ -60,7 +61,7 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
 
     private void ChangeState(BuildingState newState)
     {
-        state?.Dispose();
+        state?.Kill();
         state = newState;
     }
 

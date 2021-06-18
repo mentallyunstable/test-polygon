@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingConfigObserver : MonoBehaviour, IInitializible, IConfigObserver<BuildingConfig>
+public class BuildingConfigObserver : MonoBehaviour, IInitializible, IConfigObserver<Building, BuildingConfig>
 {
     [SerializeField]
     private string configPrefixName;
@@ -22,7 +22,7 @@ public class BuildingConfigObserver : MonoBehaviour, IInitializible, IConfigObse
         LoadConfigs();
     }
 
-    public void AddSubscriber(IConfigLoadable<BuildingConfig> subscriber)
+    public void AddSubscriber(Building subscriber)
     {
         if (loader == null)
         {
@@ -41,7 +41,7 @@ public class BuildingConfigObserver : MonoBehaviour, IInitializible, IConfigObse
         }
     }
 
-    public void RemoveSubscriber(IConfigLoadable<BuildingConfig> subscriber)
+    public void RemoveSubscriber(Building subscriber)
     {
         if (loader == null)
         {
