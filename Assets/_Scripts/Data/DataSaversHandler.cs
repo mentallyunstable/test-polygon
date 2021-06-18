@@ -8,7 +8,7 @@ public class DataSaversHandler : Singleton<DataSaversHandler>, IFocusEventable
     public bool debugging;
 
     [Inject]
-    private FocusEventsHandler focusEventsHandler;
+    private readonly IObserver<IFocusEventable> focusEventsHandler;
 
     private readonly List<IDataSaver> savers = new List<IDataSaver>();
 
