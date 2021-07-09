@@ -11,7 +11,7 @@ public class BuildingInitializer : MonoBehaviour, IInitializer<BuildingInitialDa
     [SerializeField]
     private BuildingViewController viewController;
 
-    private List<IInitiable<BuildingInitialData>> initiables = new List<IInitiable<BuildingInitialData>>();
+    private readonly List<IInitiable<BuildingInitialData>> initiables = new List<IInitiable<BuildingInitialData>>();
 
     private void Start()
     {

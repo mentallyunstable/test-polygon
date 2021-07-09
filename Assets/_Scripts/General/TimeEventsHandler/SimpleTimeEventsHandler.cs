@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITimeEventable
-{
-    string TimerKey { get; }
-    IEnumerator ITimeEventCoroutine();
-}
-
-public class TimeEventsHandler : MonoBehaviour
+/// <summary>
+/// Common <see cref="ITimeEventsHandler"/>. Starts the coroutine on adding new subscriber with <see cref="AddTimer(ITimeEventable)"/> method.
+/// </summary>
+public class SimpleTimeEventsHandler : MonoBehaviour, ITimeEventsHandler
 {
     private readonly Dictionary<string, IEnumerator> timers = new Dictionary<string, IEnumerator>();
 
-    public void AddNewTimer(ITimeEventable timeEventable)
+    public void AddTimer(ITimeEventable timeEventable)
     {
         if (!timers.ContainsKey(timeEventable.TimerKey))
         {
             timers.Add(timeEventable.TimerKey, timeEventable.ITimeEventCoroutine());
+            // TODO: need to detect coroutine end and remove it from timers dictionary
             StartCoroutine(timeEventable.ITimeEventCoroutine());
         }
     }

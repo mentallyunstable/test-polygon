@@ -19,12 +19,14 @@ public class BigIntegerValue
     private BigIntegerValue Add(BigInteger value)
     {
         Value += value;
+        OnValueChange?.Invoke(Value);
         return this;
     }
 
     private BigIntegerValue Sub(BigInteger value)
     {
         Value -= value;
+        OnValueChange?.Invoke(Value);
         return this;
     }
 

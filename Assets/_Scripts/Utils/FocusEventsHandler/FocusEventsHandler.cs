@@ -3,11 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IFocusEventable
-{
-    void OnFocusChange(bool focus);
-}
-
 public class FocusEventsHandler : MonoBehaviour, IObserver<IFocusEventable>
 {
     private readonly List<IFocusEventable> subscribers = new List<IFocusEventable>();

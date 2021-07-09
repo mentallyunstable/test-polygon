@@ -5,7 +5,7 @@ public class TimeEventsHandlerInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        Container.BindInstance(GetComponent<TimeEventsHandler>()).AsSingle();
+        Container.BindInstance(GetComponent<ITimeEventsHandler>()).AsSingle();
         //Container.BindInterfacesTo<ITimeEventable>();
     }
 }

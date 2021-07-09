@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiable<BuildingInitialData>, IDataSaveable<BuildingData>, ITimeEventable, IDataLoadable<BuildingData>
+public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiable<BuildingInitialData>, 
+    IDataSaveable<BuildingData>, ITimeEventable, IDataLoadable<BuildingData>
 {
     [SerializeField]
     private BuildingInitializer initializer;
@@ -24,9 +25,9 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
     private BuildingViewController viewController;
 
     [Inject]
-    private IConfigObserver<Building, BuildingConfig> configObserver;
+    private readonly IConfigObserver<Building, BuildingConfig> configObserver;
     [Inject]
-    private TimeEventsHandler timeEventshandler;
+    private readonly ITimeEventsHandler timeEventshandler;
 
     private BuildingState state;
 
@@ -34,14 +35,13 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
     {
         initializer.AddInitiable(this);
         configObserver.AddSubscriber(this);
-        timeEventshandler.AddNewTimer(this);
+        timeEventshandler.AddTimer(this);
         Debug.Log("Building Awake");
     }
 
     public void Initiate(BuildingInitialData initialData)
     {
         dataSaver = initialData.DataSaver;
-        //configObserver = initialData.ConfigObserver;
         viewController = initialData.ViewController;
 
         dataSaver.AddSubscriber(this);
