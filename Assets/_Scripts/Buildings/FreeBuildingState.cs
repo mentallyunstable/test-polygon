@@ -7,7 +7,7 @@ public class FreeBuildingState : BuildingState
 {
     private BigInteger price;
 
-    public override Building.BuildingStateType StateType => Building.BuildingStateType.Free;
+    public override Building.StateType Type => Building.StateType.Free;
 
     public FreeBuildingState(Building context) : base(context) { }
 

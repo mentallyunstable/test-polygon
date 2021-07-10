@@ -5,6 +5,6 @@ using UnityEngine;
 public class BuildingData : Data
 {
     public string name;
-    public Building.BuildingStateType stateType;
+    public Building.StateType stateType;
     public string currentWorkersAmount;
 }

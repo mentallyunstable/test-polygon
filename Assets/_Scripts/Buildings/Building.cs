@@ -3,73 +3,70 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiable<BuildingInitialData>, 
+public class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiable<BuildingInitialData>,
     IDataSaveable<BuildingData>, ITimeEventable, IDataLoadable<BuildingData>
 {
+    public string ConfigName => buildingName;
+
+    public string TimerKey => "BuildingBehaviour_TestKey";
+
+    private BuildingState _state;
+
+    [Inject]
+    private readonly IConfigObserver<Building, BuildingConfig> _configObserver;
+    [Inject]
+    private readonly ITimeEventsHandler _timeEventshandler;
+    [Inject]
+    private IDataSaver<BuildingData> _dataSaver;
+
     [SerializeField]
     private BuildingInitializer initializer;
     [SerializeField]
     private string buildingName;
-
-    public string ConfigName => buildingName;
+    private BuildingViewController _viewController;
 
     public BuildingConfig Config { get; private set; }
-
-    public string TimerKey => "BuildingBehaviour_TestKey";
-
-    public bool IsFree { get { return state is FreeBuildingState; } }
-    public bool IsBought { get { return state is BoughtBuildingState; } }
-    public bool IsWorking { get { return state is WorkingBuildingState; } }
-
-    private BuildingDataSaver dataSaver;
-    private BuildingViewController viewController;
-
-    [Inject]
-    private readonly IConfigObserver<Building, BuildingConfig> configObserver;
-    [Inject]
-    private readonly ITimeEventsHandler timeEventshandler;
-
-    private BuildingState state;
+    public StateType CurrectState => _state.Type;
 
     private void Awake()
     {
         initializer.AddInitiable(this);
-        configObserver.AddSubscriber(this);
-        timeEventshandler.AddTimer(this);
+        _configObserver.AddSubscriber(this);
+        _timeEventshandler.AddTimer(this);
         Debug.Log("Building Awake");
     }
 
     public void Initiate(BuildingInitialData initialData)
     {
-        dataSaver = initialData.DataSaver;
-        viewController = initialData.ViewController;
+        _dataSaver = initialData.DataSaver;
+        _viewController = initialData.ViewController;
 
-        dataSaver.AddSubscriber(this);
+        _dataSaver.AddSubscriber(this);
     }
 
     private void OnDestroy()
     {
-        dataSaver.RemoveSubscriber(this);
-        configObserver.RemoveSubscriber(this);
-        timeEventshandler.RemoveTimer(this);
+        _dataSaver.RemoveSubscriber(this);
+        _configObserver.RemoveSubscriber(this);
+        _timeEventshandler.RemoveTimer(this);
     }
 
     private void OnMouseUpAsButton()
     {
-        viewController.ShowView(this);
+        _viewController.ShowView(this);
     }
 
     private void ChangeState(BuildingState newState)
     {
-        state?.Kill();
-        state = newState;
+        _state?.Kill();
+        _state = newState;
     }
 
     public void LoadConfig(BuildingConfig config)
     {
         Config = config;
 
-        state = new FreeBuildingState(this);
+        _state = new FreeBuildingState(this);
     }
 
     public BuildingData GetSaveData()
@@ -77,10 +74,10 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
         BuildingData data = new BuildingData()
         {
             name = buildingName,
-            stateType = state.StateType,
+            stateType = _state.Type,
         };
 
-        state.SetSaveData(ref data);
+        _state.SetSaveData(ref data);
 
         return data;
     }
@@ -101,7 +98,7 @@ public sealed class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, I
         Debug.Log(data);
     }
 
-    public enum BuildingStateType
+    public enum StateType
     {
         Free,
         Bought,

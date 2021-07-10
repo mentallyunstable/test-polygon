@@ -5,13 +5,13 @@ using UnityEngine;
 
 public abstract class BuildingState
 {
-    protected Building buildingContext;
+    protected Building context;
 
-    public abstract Building.BuildingStateType StateType { get; }
+    public abstract Building.StateType Type { get; }
 
     public BuildingState(Building context)
     {
-        buildingContext = context;
+        this.context = context;
 
         SetContext(context);
 
@@ -21,7 +21,6 @@ public abstract class BuildingState
     public void Kill()
     {
         OnStateKill();
-        //Debug.LogWarning("BuildingState Dispose");
     }
 
     private void SetContext(Building context)

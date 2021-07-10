@@ -8,7 +8,7 @@ public class WorkingBuildingState : BuildingState
     private BigInteger rawIncome;
     public float rawInterval;
 
-    public override Building.BuildingStateType StateType => Building.BuildingStateType.Working;
+    public override Building.StateType Type => Building.StateType.Working;
 
     public WorkingBuildingState(Building context) : base(context) { }
 

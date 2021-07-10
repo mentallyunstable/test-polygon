@@ -9,7 +9,7 @@ public class BuildingViewController : Singleton<BuildingViewController>
 
     public void ShowView(Building building)
     {
-        if (building.IsFree)
+        if (building.CurrectState == Building.StateType.Free)
         {
             freeBuildingView.InitView(building);
         }

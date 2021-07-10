@@ -8,7 +8,7 @@ public class BoughtBuildingState : BuildingState
     public BigInteger neededWorkersAmount;
     public BigInteger currentWorkersAmount;
 
-    public override Building.BuildingStateType StateType => Building.BuildingStateType.Bought;
+    public override Building.StateType Type => Building.StateType.Bought;
 
     public BoughtBuildingState(Building context) : base(context) { }
 
