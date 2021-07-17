@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiable<BuildingInitialData>,
+public class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiable,
     IDataSaveable<BuildingData>, ITimeEventable, IDataLoadable<BuildingData>
 {
     public string ConfigName => buildingName;
@@ -13,14 +13,14 @@ public class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiab
     private BuildingState _state;
 
     [Inject]
+    private readonly IInitializer<Building> _initializer;
+    [Inject]
     private readonly IConfigObserver<Building, BuildingConfig> _configObserver;
     [Inject]
     private readonly ITimeEventsHandler _timeEventshandler;
-    [Inject]
-    private IDataSaver<BuildingData> _dataSaver;
+    //[Inject]
+    private readonly IDataSaver<BuildingData> _dataSaver;
 
-    [SerializeField]
-    private BuildingInitializer initializer;
     [SerializeField]
     private string buildingName;
     private BuildingViewController _viewController;
@@ -30,25 +30,24 @@ public class Building : MonoBehaviour, IConfigLoadable<BuildingConfig>, IInitiab
 
     private void Awake()
     {
-        initializer.AddInitiable(this);
+        _initializer.AddSubscriber(this);
         _configObserver.AddSubscriber(this);
         _timeEventshandler.AddTimer(this);
+        //_dataSaver.AddSubscriber(this);
         Debug.Log("Building Awake");
     }
 
-    public void Initiate(BuildingInitialData initialData)
+    public void Initiate()
     {
-        _dataSaver = initialData.DataSaver;
-        _viewController = initialData.ViewController;
-
-        _dataSaver.AddSubscriber(this);
+        Debug.Log($"Initiate building with name: {buildingName}");
     }
 
     private void OnDestroy()
     {
-        _dataSaver.RemoveSubscriber(this);
+        _initializer.RemoveSubscriber(this);
         _configObserver.RemoveSubscriber(this);
         _timeEventshandler.RemoveTimer(this);
+        //_dataSaver.RemoveSubscriber(this);
     }
 
     private void OnMouseUpAsButton()

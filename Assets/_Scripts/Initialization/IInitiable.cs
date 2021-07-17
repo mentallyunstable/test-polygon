@@ -1,7 +1,5 @@
 ﻿
-public interface IInitialData { }
-
-public interface IInitiable<T> where T : IInitialData
+public interface IInitiable
 {
-    void Initiate(T initialData);
+    void Initiate();
 }

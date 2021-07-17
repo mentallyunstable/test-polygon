@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingConfigObserver : MonoBehaviour, IInitializible, IConfigObserver<Building, BuildingConfig>
+public class BuildingConfigObserver : MonoBehaviour, IInitiable, IConfigObserver<Building, BuildingConfig>
 {
     [SerializeField]
     private string configPrefixName;
@@ -12,10 +12,10 @@ public class BuildingConfigObserver : MonoBehaviour, IInitializible, IConfigObse
 
     private void Awake()
     {
-        Initialize();
+        Initiate();
     }
 
-    public void Initialize()
+    public void Initiate()
     {
         loader = new BuildingConfigLoader(configPrefixName);
 

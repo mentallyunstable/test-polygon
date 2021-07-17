@@ -1,7 +1,7 @@
-﻿
-public interface IInitializer<T> where T : IInitialData
+﻿/// <summary>
+/// Inteface for 
+/// </summary>
+public interface IInitializer<T> : IObserver<T> where T : IInitiable
 {
-    void AddInitiable(IInitiable<T> initiable);
-    void RemoveInitiable(IInitiable<T> initiable);
     void Initialize();
 }
